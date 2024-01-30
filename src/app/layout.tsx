@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import ThemeProvider from "@/providers/theme-provider";
+import { ClerkProvider } from "@clerk/nextjs";
+import LayoutProvider from "@/providers/layout-provider";
+import ReduxProvider from "@/providers/redux-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,8 +19,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={inter.className}>
+          <ThemeProvider>
+            <ReduxProvider>
+              <LayoutProvider>{children}</LayoutProvider>
+            </ReduxProvider>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
