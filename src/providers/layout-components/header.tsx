@@ -36,7 +36,7 @@ function Header() {
     getCurrentUser();
   }, []);
   return (
-    <div className="bg-gray-100 w-full p-5 py-2 py-1 flex justify-between items-center order-b border-solid border-gray-300">
+    <div className="bg-gray-100 w-full p-5 py-2 flex justify-between items-center order-b border-solid border-gray-300">
       <div className="text-2xl font-bold text-primary uppercase">
         <h1>Chat App</h1>
       </div>
