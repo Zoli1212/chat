@@ -6,8 +6,10 @@ import dayjs from "dayjs";
 import { space } from "postcss/lib/list";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { UserState } from "@/redux/userSlice";
-import { useSelector } from "react-redux";
+import { SetCurrentUser, UserState } from "@/redux/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { uploadImageToFirebaseAndReturnUrl } from "@/helpers/image-upload";
+import { UpdateUserProfile } from "@/server-actions/users";
 
 function CurrentUserInfo({
   showCurrentUserInfo,
@@ -23,6 +25,8 @@ function CurrentUserInfo({
   );
 
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null)
+
+  const dispatch = useDispatch()
 
   const { signOut } = useClerk();
   const router = useRouter();
@@ -51,6 +55,25 @@ function CurrentUserInfo({
   };
 
   const onProfilePictureUpdate = async () => {
+
+    try{
+
+      setLoading(true)
+
+      const url:string = await uploadImageToFirebaseAndReturnUrl(selectedFile!)
+
+      const response = await UpdateUserProfile(currentUserData?._id !, {profilePicture: url})
+
+      if(response.error) throw new Error(response.error)
+
+      dispatch(SetCurrentUser(response))
+
+    }catch(error){
+      console.log((error as Error).message)
+    }finally{
+      setLoading(false)
+
+    }
 
   }
   return (

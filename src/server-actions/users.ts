@@ -38,3 +38,28 @@ export const getCurrentUserFromMongoDB = async () => {
     }
 
 }
+
+export const UpdateUserProfile = async (userId: string, payload: any) => {
+
+    try{
+
+        const updatedUser = await UserModel.findByIdAndUpdate(userId, payload, { new: true})
+
+        return JSON.parse(JSON.stringify(updatedUser))
+
+    }catch(error: any){
+        console.log((error as Error).message)
+    }
+
+}
+
+export const GetAllUsers = async () => {
+    try {
+      const users = await UserModel.find({});
+      return JSON.parse(JSON.stringify(users));
+    } catch (error: any) {
+      return {
+        error: error.message,
+      };
+    }
+  }
